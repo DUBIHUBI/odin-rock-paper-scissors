@@ -64,14 +64,38 @@ function playRound(playerSelection, computerSelection) {
 
 const buttons = document.querySelectorAll('button');
 const gameLog = document.querySelector('.game-log');
+const result = document.querySelector('.result');
+const playerScoreDisplay = document.querySelector('.player-score');
+const computerScoreDisplay = document.querySelector('.computer-score');
+const endGameDisplay = document.querySelector('.end-game-message');
 
 buttons.forEach((button) => {
   button.addEventListener('click', (e) => {
-    const result = document.createElement('div');
-    result.classList.add('result');
-    result.textContent = playRound(e.target.className, getComputerChoice());
-    gameLog.appendChild(result);
+    result.textContent = playRound(button.className, getComputerChoice());
+    playerScoreDisplay.textContent = `Your score: ${playerScore}`;
+    computerScoreDisplay.textContent = `Computer score: ${computerScore}`;
 
+    if (isGameOver()) gameOver();
     // console.log(gameLog);
   });
 });
+
+function gameOverMessage() {
+  let gameMessage;
+  if (playerScore > computerScore) {
+    gameMessage = `Congratulations! You Won ${playerScore} - ${computerScore}`;
+  } else {
+    gameMessage = `You Lost ${playerScore} - ${computerScore}`;
+  }
+  return gameMessage;
+}
+function gameOver() {
+  endGameDisplay.textContent = gameOverMessage();
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
+}
+
+function isGameOver() {
+  return playerScore === 5 || computerScore === 5;
+}
